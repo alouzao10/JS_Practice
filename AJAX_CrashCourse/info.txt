@@ -1,0 +1,17 @@
+/*
+AJAX = Async JS and XML
+
+- Ability to send and receive data async
+- Has no interference with the active web page
+- Data returned more traditionally with JSON
+- Executed from JS to call some request from a server
+- XMLHttpRequest Object API
+    - Transfer data between the browser and server
+    - API in the form of an object to handle/pass requests
+- Libraries (Some common ones)
+    - jQuery
+    - Axios
+    - Fetch API
+    - Node HTTP
+
+*/
