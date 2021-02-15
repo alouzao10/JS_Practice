@@ -42,19 +42,21 @@ function getUser(email, pass, callback) {
 
 function getVideos(email, callback) {
   setTimeout(() => {
-    callback(['Cool Story', "What's Up Fam?", 'Cookies!?!?!']);
+    callback(['Cool Story', "What's Up Fam?", 'Cookies!?!?!', email]);
   }, 1000);
 }
 
-// Stacking callbacks to get all data before completing the execution
-const user = getUser('bob@boo.goo', 123456, (response) => {
+function getResponse(response) {
   console.log(response);
   getVideos(response.userEmail, (videos) => {
     videos.forEach((video, i) => {
       console.log(video + ' video#: ' + (i + 1));
     });
   });
-});
+}
+
+// Stacking callbacks to get all data before completing the execution
+const user = getUser('bob@boo.goo', 123456, getResponse);
 // console.log(user); = Results in undefined because the data hasn't returned at this point
 
 console.log('End Callbacks');
@@ -72,6 +74,7 @@ const promise = new Promise((resolve, reject) => {
     }
   }, 2000);
 });
+
 promise
   .then((user) => {
     console.log(user);
@@ -100,9 +103,11 @@ function getOtherVideos(email) {
   });
 }
 
-getOtherUser('loop@coolp.co', 321654).then((user) => {
+let user2 = getOtherUser('loop@coolp.co', 321654);
+user2.then((user) => {
   console.log(user);
-  getOtherVideos(user.userEmail).then((videos) => {
+  let videos = getOtherVideos(user.userEmail);
+  videos.then((videos) => {
     videos.forEach((video) => {
       console.log(video);
     });
