@@ -96,3 +96,40 @@ cart.forEach((cartItem) => {
   console.log(`A ${cartItem.color} ${cartItem.item} ==== $ ${cartItem.price}`);
 });
 console.log(`Total ==== $ ${total}`);
+
+// Promises
+let users = [
+  { id: 1, name: 'Paul', age: 34, healthy: false },
+  { id: 2, name: 'Sally', age: 32, healthy: true },
+  { id: 3, name: 'Susie', age: 23, healthy: false },
+  { id: 4, name: 'Ally', age: 76, healthy: true },
+  { id: 5, name: 'Mike', age: 61, healthy: false },
+  { id: 6, name: 'Nicky', age: 27, healthy: true },
+  { id: 7, name: 'Sammy', age: 25, healthy: false },
+  { id: 8, name: 'Richard', age: 39, healthy: true },
+  { id: 9, name: 'Lupe', age: 55, healthy: false },
+  { id: 10, name: 'Dana', age: 82, healthy: false },
+];
+
+function getReport(users) {
+  let sick = users.filter((user) => !user.healthy);
+  let well = users.filter((user) => user.healthy);
+
+  return new Promise((pass, fail) => {
+    if (sick.length > well.length) {
+      fail({ healthyGroup: false, report: 'You are a sick bunch' });
+    } else {
+      pass({ healthyGroup: true, report: 'All seem to be well' });
+    }
+  });
+}
+
+let healthReport = getReport(users)
+  .then((data) => {
+    if (data.healthyGroup) {
+      console.log('ALL HEALTHY ');
+    }
+  })
+  .catch((err) => {
+    if (err.healthyGroup) console.log(err.report);
+  });
