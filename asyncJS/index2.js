@@ -25,7 +25,7 @@ function getPosts() {
     document.getElementById('posts').innerHTML = output;
   }, 1000); // delay 2 seconds and execute
 }
-getPosts();
+//getPosts();
 
 // create a post
 function createPost(post) {
@@ -33,11 +33,11 @@ function createPost(post) {
     posts.push(post);
   }, 3000);
 }
-createPost({
+/*createPost({
   id: 4,
   title: 'This is some more Post',
   content: 'Some more other cool content goes here...',
-});
+});*/
 
 // Callback Functions
 function createCallbackPost(post, callback) {
@@ -46,14 +46,14 @@ function createCallbackPost(post, callback) {
     callback();
   }, 2000);
 }
-createCallbackPost(
+/*createCallbackPost(
   {
     id: 5,
     title: 'This is a Callback Post',
     content: 'Some cool callback content goes here...',
   },
   getPosts
-);
+);*/
 
 // Other Callback Example
 let cart = [
@@ -117,19 +117,82 @@ function getReport(users) {
 
   return new Promise((pass, fail) => {
     if (sick.length > well.length) {
-      fail({ healthyGroup: false, report: 'You are a sick bunch' });
+      fail('You are a sick bunch');
     } else {
-      pass({ healthyGroup: true, report: 'All seem to be well' });
+      pass('All seem to be well');
     }
   });
 }
 
 let healthReport = getReport(users)
   .then((data) => {
-    if (data.healthyGroup) {
-      console.log('ALL HEALTHY ');
-    }
+    console.log(data);
   })
   .catch((err) => {
-    if (err.healthyGroup) console.log(err.report);
+    console.log(err);
   });
+
+// Using Promise.all()
+const fetch = require('node-fetch');
+const promise1 = Promise.resolve('A resolution');
+const promise2 = Promise.reject('A reject');
+const promise3 = new Promise((pass, fail) => {
+  setTimeout(() => {
+    pass('Another resolution');
+  }, 2000);
+});
+const promise4 = fetch(
+  'https://jsonplaceholder.typicode.com/users'
+).then((res) => res.json());
+const promise5 = new Promise((pass, fail) => {
+  setTimeout(() => {
+    pass('Another reject');
+  }, 2000);
+});
+
+// Returns all instances of a pass / fail case
+// If there is one instance of a reject the Promise goes into the catch and terminates
+Promise.all([promise1, promise2, promise3, promise4, promise5])
+  .then((values) => {
+    console.log(values);
+  })
+  .catch((errors) => console.log(errors));
+
+// Using async + await
+let user = { name: 'Randy', age: 62 };
+async function getSome(user) {
+  let { name, age } = user;
+  let nameInfo = await checkName(name);
+  let ageInfo = await checkAge(age);
+  let userInfo = '';
+  nameInfo
+    .then((info) => (userInfo = info.msg))
+    .catch((err) => (userInfo = err.errMsg));
+
+  ageInfo
+    .then((info) => (userInfo += info.msg))
+    .catch((err) => (userInfo += err.errMsg));
+  return userInfo;
+}
+
+function checkName(name) {
+  return new Promise((pass, fail) => {
+    if (name.length < 4) {
+      pass({ msg: 'Name is short' });
+    } else {
+      fail({ errMsg: 'Name is long' });
+    }
+  });
+}
+
+function checkAge(age) {
+  return new Promise((pass, fail) => {
+    if (age < 50) {
+      pass({ msg: 'Age is young' });
+    } else {
+      fail({ errMsg: 'Age is old' });
+    }
+  });
+}
+
+console.log(getSome(user));
