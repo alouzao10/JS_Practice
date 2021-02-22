@@ -1,3 +1,5 @@
+// Practice from the Code Wars Kata
+
 // Is Word a Palendrome
 function isPalendrome(word) {
   // palendrom is same forward and backwards
